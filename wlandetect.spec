@@ -10,6 +10,7 @@ Patch1:		wlandetect-init.d.patch
 Patch2:		wlandetect-pid.patch
 BuildArch:	noarch
 Requires:	wireless-tools
+Buildroot: 	%{_tmppath}/%{name}-%{version}-buildroot
 
 %description
 Wlandetect is a very simple Perl script that checks which access points and

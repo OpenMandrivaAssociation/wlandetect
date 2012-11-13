@@ -1,0 +1,16 @@
+--- ../../../wlandetect.orig/SOURCES/wlandetect-0.3/wlandetect	2003-12-08 21:30:53.000000000 -0200
++++ wlandetect	2005-08-22 18:15:44.000000000 -0300
+@@ -85,6 +85,13 @@
+ 
+ # Fork 
+ if(fork() > 0) { exit 0; }
++
++# Register process identifier 
++if (open(PIDF, "> /var/run/wlandetect.pid")) {
++	print PIDF $$;
++	close(PIDF);
++}
++
+ while(1) {
+ 	sleep($timeout);
+ 	set_interfaces;

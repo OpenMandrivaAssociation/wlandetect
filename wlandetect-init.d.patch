@@ -1,0 +1,92 @@
+--- wlandetect-init.d.old	2003-12-07 14:29:18.000000000 -0200
++++ wlandetect-init.d		2005-08-23 10:27:22.000000000 -0300
+@@ -1,17 +1,78 @@
+ #!/bin/sh
++# chkconfig: 345 10 90
++# description: Checks what access points and other peers can \
++#              be reached and executes some commands based on the \
++#              peers it found.
+ 
+-test -x /usr/local/sbin/wlandetect || exit 0
++# Source function library.
++. /etc/rc.d/init.d/functions
++
++pidfile="/var/run/wlandetect.pid"
++
++test -x /usr/sbin/wlandetect || exit 0
++
++function wlandetect_start()
++{
++	gprintf "Starting wlandetect: "
++	if [ -r "$pidfile" ] ; then
++		echo_failure
++		echo
++		return 1
++	fi
++    	/usr/sbin/wlandetect -d -q
++	RETVAL=$? 
++	if [ "$RETVAL" -eq "0" ]; then
++		touch /var/lock/subsys/wlandetect
++		echo_success
++	else
++		echo_failure
++	fi
++	echo
++}
++
++function wlandetect_stop()
++{
++	gprintf "Stopping wlandetect: "
++	if [ -r "$pidfile" ] ; then
++		kill `cat "$pidfile"`
++		RETVAL=$?
++		if [ "$RETVAL" -eq "0" ] ; then
++			rm -f /var/lock/subsys/wlandetect "$pidfile"
++			echo_success
++			echo
++			return 0
++		fi
++	fi
++	echo_failure
++	echo
++}
++
++function wlandetect_restart()
++{
++	wlandetect_stop
++	wlandetect_start
++}
++
++RETVAL=0
+ 
+ case "$1" in
+-    start | restart | force-reload | reload)
+-    		killall wlandetect
+-    		/usr/local/sbin/wlandetect -d
+-                ;;
++    start)
++	wlandetect_start
++	;;
++    restart | force-reload | reload)
++	wlandetect_restart
++	;;
+     stop)
+-    		killall wlandetect
+-                ;;
+-*)
+-                echo "Usage: $0 {start|stop|restart|reload|force-reload}"
+-                exit 1
+-                ;;
++	wlandetect_stop
++	;;
++    status)
++	status wlandetect
++	RETVAL=$?
++	;;
++    *)
++	gprintf "Usage: %s {start|stop|restart|reload|force-reload}\n" "$0"
++	exit 1
++	;;
+ esac
++
++exit $RETVAL

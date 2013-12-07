@@ -1,7 +1,7 @@
 Summary: 	Simple wireless roaming daemon
 Name: 		wlandetect
 Version: 	0.3
-Release: 	12
+Release: 	13
 License: 	GPL
 Group: 		System/Configuration/Networking
 URL: 		http://jelmer.vernstok.nl/oss/wlandetect/

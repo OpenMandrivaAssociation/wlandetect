@@ -4,7 +4,7 @@ Version: 	0.3
 Release: 	18
 License: 	GPL
 Group: 		System/Configuration/Networking
-URL: 		http://jelmer.vernstok.nl/oss/wlandetect/
+URL: 		https://jelmer.vernstok.nl/oss/wlandetect/
 Source: 	%{name}-%{version}.tar.bz2
 Patch1:		wlandetect-init.d.patch
 Patch2:		wlandetect-pid.patch
